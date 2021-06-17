@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<title>Просмотр деталей
+    пользователя</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <th:block th:insert="fragments/head.html :: head"/>
+</head>
+<body>
+    <th:block th:insert="fragments/navBar.html :: navBar"/>
+    <div class="main-container">
+        <div class="container">
+            <div class="py-5 px-3">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Логин</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Фамилия</th>
+                        <th scope="col">Роль</th>
+                        <th scope="col">Статус</th>
+                        <th scope="col">Дата создания</th>
+                        <th scope="col">Изменить юзера</th>
+                        <th scope="col">Изменить статус</th>
+                    </tr>
+                    </thead>
+                    <tr th:each="user : ${UserAccountDto}">
+                        <td th:text="${user.id}"/>
+                        <td th:text="${user.userName}"/>
+                        <td th:text="${user.firstName}"/>
+                        <td th:text="${user.lastName}"/>
+                        <td th:text="${user.role}"/>
+                        <td th:text="${user.statusView}"/>
+                        <td th:text="${user.createdAt}"/>
+                        <form method="Get" enctype="multipart/form-data"
+                              th:action="@{/user/{uid}/edit (uid=${user.id})}">
+                            <td>
+                                <input sec:authorize="  hasRole('ROLE_ADMIN')" class="btn btn-outline-success btn-sm"
+                                       type="submit"
+                                       value="Изменить"/>
+                            </td>
+                        </form>
+                        <td>
+                            <form class="container center_div login-form" th:action="@{/user/{id}/ (id=${user.id})}"
+                                  method="Get">
+                                <div class="form-group">
+                                    <select class="form-control" id="exampleSelect1" name="statusView">
+                                        <option value="LOCK">LOCK</option>
+                                        <option value="UNLOCK">UNLOCK</option>
+                                    </select>
+                                    <input sec:authorize="  hasRole('ROLE_ADMIN')"
+                                           class="btn btn-outline-success btn-sm" type="submit"
+                                           value="Изменить статус"/>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <a class="nav-link" href="/user/">Вся таблица</a>
+    </div>
+</body>
+</html>

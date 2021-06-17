@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<title>Пользователи</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <th:block th:insert="fragments/head.html :: head"/>
+</head>
+<body>
+    <th:block th:insert="fragments/navBar.html :: navBar"/>
+
+    <div class="main container doctor-list">
+        <div class="container">
+            <form class="starter-template text py-5 px-3">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Личный номер</th>
+                        <th scope="col">UserName
+                            <form class="container center_div login-form" th:action="@{/user}" method="Get">
+                                <div class="form-group">
+                                    <input class="form-control" id="userName" type="text" name="userName"/>
+                                    <input class="btn btn-outline-success btn-sm" type="submit"
+                                           value="Фильтровать по логину"/>
+                                </div>
+                            </form>
+                        </th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Фамилия</th>
+                        <th scope="col">Роль
+                            <form class="container center_div login-form"
+                                  th:action="@{/user}" method="Get">
+                                <div class="form-group">
+                                    <select class="form-control" id="exampleSelect1" name="role"
+                                    >
+                                        <option value="USER">USER</option>
+                                        <option value="ADMIN">ADMIN</option>
+                                    </select>
+                                    <input class="btn btn-outline-success btn-sm" type="submit"
+                                           value="Фильтровать по роли"/>
+                                </div>
+                            </form>
+                        </th>
+                        <th scope="col">Просмотр детализации пользователя</th>
+                    </tr>
+                    </thead>
+                    <tr th:each="user : ${usersList}">
+                        <td th:text="${user.id}"/>
+                        <td th:text="${user.userName}"/>
+                        <td th:text="${user.firstName}"/>
+                        <td th:text="${user.lastName}"/>
+                        <td th:text="${user.role}"/>
+                        <form method="get" enctype="multipart/form-data"
+                              th:action="@{/user/{id} (id=${user.id})}">
+                            <td>
+                                <input class="btn btn-outline-success btn-sm" type="submit"
+                                       value="Просмотр"/>
+                            </td>
+                        </form>
+                    </tr>
+                </table>
+                <div th:if="${totalPages > 1}">
+
+                    <div class="row col-sm-10">
+                        <div class="col-sm-2">
+                            Всего: [[${totalItems}]]
+                        </div>
+                        <div class="col-sm-1">
+                        <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+
+                            <a th:if="${currentPage != i}" th:href="@{'/user'+ '?pageNo='+ ${i}}"> [[${i}]]</a>
+                            <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                        </span>
+                        </div>
+                        <div class="col-sm-1">
+                            <a th:if="${currentPage < totalPages}"
+                               th:href="@{'/user' + '?pageNo=' + ${currentPage + 1}}"> Next </a>
+                            <span th:unless="${currentPage < totalPages}">Next</span>
+                        </div>
+                        <div class="col-sm-1">
+
+                            <a th:if="${currentPage < totalPages}" th:href="@{'/user' + '?pageNo='+ ${totalPages}}">
+                                Last </a>
+                            <span th:unless="${currentPage < totalPages}">Last</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+        <a class="nav-link" href="/user/">Вся таблица</a>
+    </div>
+</body>
+</html>

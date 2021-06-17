@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+        xmlns:th="http://www.thymeleaf.org">
+<title>Регистрация </title>
+<head>
+    <th:block th:insert="fragments/head.html :: head"/>
+</head>
+<body>
+    <th:block th:insert="fragments/navBar.html :: navBar"/>
+    <div class="main-container">
+        <div class="form-title">Введите данные</div>
+        <form class="container center_div register-form" th:action="@{/user/{id}/edit (id=${userAccountDto.id})}"
+              method="Post"
+              th:object="${userAccountDto}">
+            <div class="form-group">
+                <label for="userNameInput">Username:</label>
+                <input class="form-control" id="userNameInput" type="text"
+                       placeholder="Только латинские символы от 3 до 16" name="userName"
+                       th:field="*{userName}">
+            </div>
+            <div class="row justify-content-center alert alert-danger" role="alert"
+                 th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">Name Error
+            </div>
+            <div class="form-group">
+                <label for="passwordInput">Password:</label>
+                <input class="form-control" id="passwordInput" type="text"
+                       placeholder="Только латинские символы и цифры от 3 до 16" name="password"
+                       th:field="*{password}">
+            </div>
+            <div class="row justify-content-center alert alert-danger" role="alert"
+                 th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name Error
+            </div>
+            <div class="form-group">
+                <label for="firstNameInput">FirstName:</label>
+                <input class="form-control" id="firstNameInput" type="text"
+                       placeholder="Только латинские символы от 1 до 16" name="firstName"
+                       th:field="*{firstName}">
+            </div>
+            <div class="row justify-content-center alert alert-danger" role="alert"
+                 th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name Error
+            </div>
+            <div class="form-group">
+                <label for="lastNameInput">LastName:</label>
+                <input class="form-control" id="lastNameInput" type="text"
+                       placeholder="Только латинские символы от 1 до 16" name="lastName"
+                       th:field="*{lastName}">
+            </div>
+            <div class="row justify-content-center alert alert-danger" role="alert"
+                 th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name Error
+            </div>
+
+            <div class="form-group">
+                <label for="exampleSelect1">Роль пользователя</label>
+                <select class="form-control" id="exampleSelect1" name="role">
+                    <option value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+            </div>
+            <input sec:authorize=" hasRole('ROLE_ADMIN')" type="submit" class="btn btn-success"/>
+        </form>
+    </div>
+</body>
+</html>
